@@ -14,16 +14,6 @@ class ProductSeeder extends Seeder
      */
     public function run()
     {
-        // \DB::table('products')->insert([
-        //     'name' => 'xbox',
-        //     'pictures' => 'link',
-        //     'price' => '12',
-        //     'description' => 'ik ben een xbox',
-        //     'category' => 'gaming',
-        //     'sold' => 'no'
-
-        // ]);
-
         $product = new \App\Models\Product();
         $product->name = "ps3";
         $product->pictures = "link";
