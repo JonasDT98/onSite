@@ -22,5 +22,13 @@ Route::get('/profile', function(){
 });
 
 Route::get('/home', function(){
-    return view('home/index');
+    $data['title'] = "The home page";
+    $data['items'] = [
+        "ps5",
+        "xbox",
+        "gitaar",
+        "tv",
+        "zetel"
+    ];
+    return view('home/index', $data);
 });
