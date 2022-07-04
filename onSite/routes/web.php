@@ -17,10 +17,6 @@ Route::get('/', function () {
     return view('login');
 });
 
-Route::get('/profile', function(){
-    return view('profile/index');
-});
-
 Route::get('/home', function(){
     $data['title'] = "The home page";
     $data['items'] = [
@@ -31,4 +27,10 @@ Route::get('/home', function(){
         "zetel"
     ];
     return view('home/index', $data);
+});
+
+Route::get('/profile', function(){
+    $users = \DB::table("users")->get();
+    $data['users'] = $users;
+    return view('profile/index', $data);
 });
