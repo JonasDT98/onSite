@@ -19,7 +19,7 @@ Route::get('/', function () {
 
 Route::get('/home', function(){
     $products = \DB::table("products")->get();
-    $data['products'] = $products;
+    $data['products'] = $products->reverse();
     return view('home/index', $data);
 });
 
