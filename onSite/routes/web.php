@@ -18,14 +18,8 @@ Route::get('/', function () {
 });
 
 Route::get('/home', function(){
-    $data['title'] = "The home page";
-    $data['items'] = [
-        "ps5",
-        "xbox",
-        "gitaar",
-        "tv",
-        "zetel"
-    ];
+    $products = \DB::table("products")->get();
+    $data['products'] = $products;
     return view('home/index', $data);
 });
 

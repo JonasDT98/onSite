@@ -1,7 +1,7 @@
-<h1>{{ $title }}</h1>
+<h1>HOME PAGE</h1>
 
 <ul>
-    @foreach($items as $item)
-    <li>{{ $item }}</li>
+    @foreach($products as $product)
+    <li>{{ $product->name }}</li>
     @endforeach
 </ul>
