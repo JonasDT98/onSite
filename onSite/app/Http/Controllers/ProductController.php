@@ -16,4 +16,18 @@ class ProductController extends Controller
         $data['product'] = $product;
         return view('home/show', $data);
     }
+
+    public function create()
+    {
+        // form
+        return view('home/create');
+    }
+
+    public function store(Request $request)
+    {
+        // db insert
+
+    }
+
+
 }

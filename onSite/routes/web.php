@@ -24,6 +24,11 @@ Route::get('/profile', function(){
     return view('profile/index', $data);
 });
 
+Route::get('/home/create', [ProductController::class, 'create']);
+Route::post('/home/store', [ProductController::class, 'store']);
+
 Route::get('/home', [ProductController::class, 'index']);
 
 Route::get('/home/{product}', [ProductController::class, 'show']);
+
+
