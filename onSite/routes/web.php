@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,14 +18,12 @@ Route::get('/', function () {
     return view('login');
 });
 
-Route::get('/home', function(){
-    $products = \DB::table("products")->get();
-    $data['products'] = $products->reverse();
-    return view('home/index', $data);
-});
-
 Route::get('/profile', function(){
     $users = \DB::table("users")->get();
     $data['users'] = $users;
     return view('profile/index', $data);
 });
+
+Route::get('/home', [ProductController::class, 'index']);
+
+Route::get('/home/{product}', [ProductController::class, 'show']);

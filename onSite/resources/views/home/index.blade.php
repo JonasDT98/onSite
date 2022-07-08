@@ -3,6 +3,6 @@
 <ul>
     
     @foreach($products as $product)
-    <li>{{ $product->name }}</li>
+    <div><a href="/home/{{ $product->id }}">{{ $product->name }}</a></div>
     @endforeach
 </ul>

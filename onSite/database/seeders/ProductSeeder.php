@@ -16,7 +16,6 @@ class ProductSeeder extends Seeder
     {
         $product = new \App\Models\Product();
         $product->name = "ps3";
-        $product->pictures = "link";
         $product->price = "19";
         $product->description = "ik ben een ps3";
         $product->category = "gaming";

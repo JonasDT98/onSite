@@ -17,8 +17,7 @@ class ProductFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->userName(),
-            'pictures' => $this->faker->imageUrl($width = 640, $height = 480),
+            'name' => $this->faker->name(),
             'price' => $this->faker->randomFloat($nbMaxDecimals = 2, $min = 1, $max = 999),
             'description' => $this->faker->realText(100,2),
             'category' => $this->faker->randomElement($array = array ('Games','Muziek','Voertuigen', 'Boeken', 'Sport', 'Tuin', 'Verzamelen', 'Kleding', 'Elektronische apparatuur')),
