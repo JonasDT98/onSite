@@ -3,6 +3,19 @@
 @section('content')
     <h1>Add product</h1>
 
+    @if($errors->any())
+    
+        @component('components/alert')
+            @slot('type') danger @endslot
+            <ul style = "margin-bottom:0;">
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+            </ul>
+        @endcomponent
+
+    @endif
+
     <form method="post" action="{{ url('/home/store') }}">
         @csrf
         <div class="mb-3">
@@ -37,11 +50,6 @@
                 <option value="Kleding">Kleding</option>
                 <option value="Elektronische apparatuur">Elektronische apparatuur</option>
             </select>
-        </div>
-
-        <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-            <label class="form-check-label" for="exampleCheck1">Accept terms and conditions</label>
         </div>
 
         <button type="submit" class="btn btn-primary">Add product</button>

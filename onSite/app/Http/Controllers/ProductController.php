@@ -31,6 +31,15 @@ class ProductController extends Controller
         // $name=$request->file('image')->getClientOriginalName();
         // $request->file('image')->store('public');
 
+        $validated = $request->validate([
+            'name' => 'required|max:200',
+            'description' => 'required',
+            'price' => 'required',
+            'image' => 'required',
+            'category' => 'required',
+
+        ]);
+
         $product = new Product();
         $product->name = $request->input('name');
         $product->price = $request->input('price');
