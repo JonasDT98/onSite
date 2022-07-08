@@ -25,4 +25,5 @@ Route::get('/profile', function(){
 });
 
 Route::get('/home', [ProductController::class, 'index']);
+
 Route::get('/home/{product}', [ProductController::class, 'show']);

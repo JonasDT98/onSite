@@ -13,7 +13,6 @@ class ProductController extends Controller
     }
 
     public function show(\App\Models\Product $product){
-        // $product = \DB::table("products")->where('id', $id)->first();
         $data['product'] = $product;
         return view('home/show', $data);
     }

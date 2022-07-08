@@ -1,5 +1,9 @@
 <h1>{{$product->name}}</h1>
-<img src="{{$product->pictures}}" alt="image">
+
+@foreach($product->picture as $p)
+    <img src="{{$p->image}}" alt="{{$p->image}}">
+@endforeach
+
 <p>{{$product->description}}</p>
 <p><strong>€{{$product->price}}</strong></p>
 <h5>Categorie: {{$product->category}}</h3>

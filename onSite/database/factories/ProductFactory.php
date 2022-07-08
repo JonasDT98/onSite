@@ -18,7 +18,6 @@ class ProductFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
-            'pictures' => $this->faker->imageUrl($width = 640, $height = 480),
             'price' => $this->faker->randomFloat($nbMaxDecimals = 2, $min = 1, $max = 999),
             'description' => $this->faker->realText(100,2),
             'category' => $this->faker->randomElement($array = array ('Games','Muziek','Voertuigen', 'Boeken', 'Sport', 'Tuin', 'Verzamelen', 'Kleding', 'Elektronische apparatuur')),
