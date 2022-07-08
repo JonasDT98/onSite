@@ -1,7 +1,8 @@
 @extends('layouts/app')
 
 @section('content')
-    <h1>HOME PAGE</h1>
+
+    <h1>Home</h1>
 
     <ul>
         @foreach($products as $product)
