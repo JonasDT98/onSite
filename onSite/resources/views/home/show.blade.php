@@ -1,10 +1,14 @@
-<h1>{{$product->name}}</h1>
+@extends('layouts/app')
 
-@foreach($product->picture as $p)
-    <img src="{{$p->image}}" alt="{{$p->image}}">
-@endforeach
+@section('content')
+    <h1>{{$product->name}}</h1>
 
-<p>{{$product->description}}</p>
-<p><strong>€{{$product->price}}</strong></p>
-<h5>Categorie: {{$product->category}}</h3>
-<a href="/home">TERUG</a>
+    @foreach($product->picture as $p)
+        <img src="{{$p->image}}" alt="{{$p->image}}">
+    @endforeach
+
+    <p>{{$product->description}}</p>
+    <p><strong>€{{$product->price}}</strong></p>
+    <h5>Categorie: {{$product->category}}</h3>
+    <a href="/home">TERUG</a>
+@endsection

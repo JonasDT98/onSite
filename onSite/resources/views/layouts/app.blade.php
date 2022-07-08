@@ -8,7 +8,14 @@
     <title>OnSite</title>
 </head>
 <body>
-    
+    <nav>
+        <ul>
+            <li><a href="../home/">Home</a></li>
+            <li><a href="../add/">Add product</a></li>
+            <li><a href="../profile/">Profile</a></li>
+            <li><a href="/">Log out</a></li>
+        </ul>
+    </nav>
     @yield('content')
 
 </body>
