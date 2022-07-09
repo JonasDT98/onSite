@@ -2,6 +2,9 @@
 
 @section('content')
 
+        @component('components/nav')
+        @endcomponent
+
     <h1>Home</h1>
 
     <ul>

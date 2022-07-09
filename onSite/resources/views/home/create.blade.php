@@ -1,6 +1,10 @@
 @extends('layouts/app')
 
 @section('content')
+
+        @component('components/nav')
+        @endcomponent
+
     <h1>Add product</h1>
 
     @if($errors->any())
@@ -33,7 +37,7 @@
 
         <div class="mb-3">
             <label for="image" class="form-label">Product images (only jpg or png)</label>
-            <input type="file" class="form-control" id="image" name="image" aria-describedby="namehelp">
+            <input type="file" class="form-control" id="image" name="image" aria-describedby="namehelp" multiple>
         </div>
 
         <div class="mb-3">

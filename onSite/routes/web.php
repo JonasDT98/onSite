@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +19,10 @@ Route::get('/', function () {
     return view('login');
 });
 
+Route::get('/register', [UserController::class, 'register']);
+
+Route::get('/login', [UserController::class, 'login']);
+
 Route::get('/profile', function(){
     $users = \DB::table("users")->get();
     $data['users'] = $users;
@@ -30,5 +35,7 @@ Route::post('/home/store', [ProductController::class, 'store']);
 Route::get('/home', [ProductController::class, 'index']);
 
 Route::get('/home/{product}', [ProductController::class, 'show']);
+
+
 
 

@@ -10,7 +10,7 @@ class ProductController extends Controller
 {
     public function index(){
         $prodcuts = \DB::table("products")->get();
-        $data['products'] = $prodcuts;
+        $data['products'] = $prodcuts->reverse();
         return view('home/index', $data);
     }
 

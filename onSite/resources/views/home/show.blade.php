@@ -1,6 +1,8 @@
 @extends('layouts/app')
 
 @section('content')
+    @component('components/nav')
+    @endcomponent
     <h1>{{$product->name}}</h1>
 
     @foreach($product->picture as $p)
