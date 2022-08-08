@@ -10,7 +10,7 @@ class ProductController extends Controller
 {
     public function index(){
         $prodcuts = \DB::table("products")->get();
-        $data['products'] = $prodcuts;
+        $data['products'] = $prodcuts->reverse();
         return view('home/index', $data);
     }
 
@@ -53,7 +53,9 @@ class ProductController extends Controller
         $image->product_id = $product->id;
         $image->save();
 
-        return redirect('home/');
+        $request->flash();
+
+        return redirect('home/create');
     }
 
 
