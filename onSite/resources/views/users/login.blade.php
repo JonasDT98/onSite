@@ -1,7 +1,7 @@
 @extends('layouts/app')
 
 @section('content')
-    <form method="post" action="">
+    <form method="post" action="{{ url('/login') }}">
         @csrf
         <h2>Log in</h2>
         <div class="form-group">
@@ -18,4 +18,5 @@
         </div>
         <button type="submit" class="btn btn-primary">Log in</button>
     </form>
+    <a href="/register">No account yet?</a>
 @endsection
