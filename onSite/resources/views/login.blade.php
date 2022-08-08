@@ -2,7 +2,7 @@
 
 @section('content')
 
-<a href="/users/login">LOGIN</a>
+<a href="/login">LOGIN</a>
     <!-- <form method="post" action="">
         @csrf
         <h2>Log in</h2>
