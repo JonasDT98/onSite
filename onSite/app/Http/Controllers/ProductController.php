@@ -53,7 +53,9 @@ class ProductController extends Controller
         $image->product_id = $product->id;
         $image->save();
 
-        return redirect('home/');
+        $request->flash();
+
+        return redirect('home/create');
     }
 
 
