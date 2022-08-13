@@ -20,6 +20,15 @@
 
     @endif
 
+    @if($flash = session('message'))
+
+        @component('components/alert')
+            @slot('type') success @endslot
+            {{ $flash }}
+        @endcomponent
+
+    @endif
+
     <form method="post" action="{{ url('/home/store') }}">
         @csrf
         <div class="mb-3">
@@ -32,7 +41,7 @@
         </div>
         <div class="mb-3">
             <label for="price" class="form-label">Product price in €</label>
-            <input type="text" class="form-control" id="price" name="price" placeholder="12.44" aria-describedby="namehelp">
+            <input value="{{ old('price') }}" type="text" class="form-control" id="price" name="price" placeholder="12.44" aria-describedby="namehelp">
         </div>
 
         <div class="mb-3">

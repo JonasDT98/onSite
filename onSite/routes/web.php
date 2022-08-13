@@ -16,7 +16,7 @@ use App\Http\Controllers\UserController;
 */
 
 Route::get('/', function () {
-    return view('/login');
+    return redirect('/login');
 });
 
 Route::get('/register', [UserController::class, 'register']);
@@ -25,11 +25,7 @@ Route::post('/register', [UserController::class, 'userStore']);
 Route::get('/login', [UserController::class, 'login']);
 Route::post('/login', [UserController::class, 'handlelogin']);
 
-Route::get('/profile', function(){
-    $users = \DB::table("users")->get();
-    $data['users'] = $users;
-    return view('profile/index', $data);
-});
+Route::get('/profile', [UserController::class, 'profile']);
 
 Route::get('/home/create', [ProductController::class, 'create']);
 Route::post('/home/store', [ProductController::class, 'store']);
@@ -38,6 +34,7 @@ Route::get('/home', [ProductController::class, 'index']);
 
 Route::get('/home/{product}', [ProductController::class, 'show']);
 
+Route::get('/logout', [UserController::class, 'logout']);
 
 
 

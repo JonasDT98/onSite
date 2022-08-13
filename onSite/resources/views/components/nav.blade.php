@@ -16,7 +16,7 @@
           <a class="nav-link active" aria-current="page" href="../profile/">Profile</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-primary" href="../login">Log out</a>
+          <a class="nav-link text-primary" href="../logout">Log out</a>
         </li>
       </ul>
       <form class="d-flex" role="search">

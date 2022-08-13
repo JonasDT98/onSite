@@ -3,13 +3,9 @@
 @section('content')
     @component('components/nav')
     @endcomponent
+    <h1>Profile</h1>
 
-    <h1>Profile page</h1>
-
-    <ul>
-        @foreach($users as $user)
-        <li>{{ $user->firstname}}  {{$user->lastname}}</li>
-        @endforeach
-    </ul>
-
+    <p>{{$user->firstname}}</p>
+    <p>{{$user->email}}</p>
+    <img src="{{$user->profile_picture}}" alt="profile picture">
 @endsection

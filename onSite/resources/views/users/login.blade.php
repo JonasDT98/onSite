@@ -1,9 +1,19 @@
 @extends('layouts/app')
 
+
 @section('content')
+<h2>Log in</h2>
+@if($flash = session('message'))
+
+        @component('components/alert')
+            @slot('type') danger @endslot
+            {{ $flash }}
+        @endcomponent
+
+    @endif
     <form method="post" action="{{ url('/login') }}">
         @csrf
-        <h2>Log in</h2>
+        
         <div class="form-group">
             <label for="email">Email address</label>
             <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
