@@ -111,6 +111,14 @@ class ProductController extends Controller
             \App\Models\Product::destroy($id);
             
             return redirect('home/');
-
         }
+
+        // public function update($id){
+
+        //     if(\Auth::user()->cannot('update', $product)){
+        //         abort(403);
+        //     }
+        //     \App\Models\Product::destroy($id);
+
+        // }
 }
