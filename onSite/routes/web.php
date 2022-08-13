@@ -36,5 +36,5 @@ Route::get('/home/{product}', [ProductController::class, 'show']);
 
 Route::get('/logout', [UserController::class, 'logout']);
 
-
+Route::delete('/home/destroy/{id}', [ProductController::class, 'destroy']);
 

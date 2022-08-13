@@ -98,4 +98,19 @@ class ProductController extends Controller
                 return redirect('/login');
             }
         }
+
+        public function destroy($id){
+
+            $product = \App\Models\Product::where('id', $id)->first();
+
+            if(\Auth::user()->cannot('delete', $product)){
+                abort(403);
+            }
+            
+            \App\Models\Picture::where('product_id', $id)->delete();
+            \App\Models\Product::destroy($id);
+            
+            return redirect('home/');
+
+        }
 }
