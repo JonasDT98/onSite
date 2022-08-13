@@ -6,8 +6,8 @@
         @endcomponent
 
     <h1>Home</h1>
-
     
     <livewire:product-search />
     
 @endsection
+
