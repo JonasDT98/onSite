@@ -33,12 +33,20 @@ class UserController extends Controller
     }
 
     public function userStore(Request $request){
+
+        $validated = $request->validate([
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'email' => 'required',
+            'password' => 'required',
+        ]);
+
         $user = new \App\Models\User();
         $user->firstname = $request->input('firstname');
         $user->lastname = $request->input('lastname');
         $user->email = $request->input('email');
         $user->password = Hash::make($request->input('password'));
-        $user->profile_picture = 'empty';
+        $user->profile_picture = 'https://freesvg.org/img/abstract-user-flat-4.png';
         $user->save();
         return redirect('/login');
     }
