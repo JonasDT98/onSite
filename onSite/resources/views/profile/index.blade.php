@@ -3,7 +3,9 @@
 @section('content')
     @component('components/nav')
     @endcomponent
-    <h1>{{$user->name}} {{$user->lastname}}</h1>
+    <h1>Profile</h1>
+
+    <p>{{$user->firstname}}</p>
     <p>{{$user->email}}</p>
-    <p>{{$user->profile_picture}}</p>
+    <img src="{{$user->profile_picture}}" alt="profile picture">
 @endsection

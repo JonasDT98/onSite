@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use \App\Models\User;
+use Session;
 
 class UserController extends Controller
 {
@@ -23,13 +24,29 @@ class UserController extends Controller
             'password' => ['required'],
         ]);
 
+        $user = User::where('email', '=', $request->email)->first();
+
         if (Auth::attempt($credentials)){
+            $request->session()->put('loginId', $user->id);
             return redirect('/home');
         }else{
             $request->flash();
             $request->session()->flash('message', 'Incorrect user or password ');
             return redirect('/login');
         }
+    }
+
+    public function profile(Request $request){
+        $data = array();
+        if (Session::has('loginId')){
+            $user = \DB::table("users")->where('id', Session::get('loginId'))->first();
+            $data['user'] = $user;
+            return view('profile/index', $data);
+            
+        }else{
+            return redirect('/login');
+        }
+        
     }
 
     public function userStore(Request $request){
@@ -63,6 +80,13 @@ class UserController extends Controller
     public function getUser(\App\Models\User $user){
         $data['user'] = $user;
         return view('profile/index', $data);
+    }
+
+    public function logout(){
+        if (Session::has('loginId')){
+            Session::pull('loginId');
+            return redirect('/login');
+        }
     }
 
 }
