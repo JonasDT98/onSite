@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use \App\Models\User;
 
 class UserController extends Controller
 {
@@ -23,11 +24,12 @@ class UserController extends Controller
         ]);
 
         if (Auth::attempt($credentials)){
-            echo "Login OK";
+            return redirect('/home');
         }else{
-            echo "FAILED";
+            $request->flash();
+            $request->session()->flash('message', 'Incorrect user or password ');
+            return redirect('/login');
         }
-
     }
 
     public function userStore(Request $request){
@@ -39,6 +41,20 @@ class UserController extends Controller
         $user->profile_picture = 'empty';
         $user->save();
         return redirect('/login');
+    }
+
+
+    // public function getUser(){
+
+    //     $users = \DB::table("users")->get();
+    //     $data['users'] = $users;
+    //     return view('profile/index', $data);
+
+    // }
+
+    public function getUser(\App\Models\User $user){
+        $data['user'] = $user;
+        return view('profile/index', $data);
     }
 
 }

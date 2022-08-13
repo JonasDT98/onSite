@@ -35,9 +35,8 @@ class ProductController extends Controller
             'name' => 'required|max:200',
             'description' => 'required',
             'price' => 'required',
-            'image' => 'required',
+            'images' => 'required',
             'category' => 'required',
-
         ]);
 
         $product = new Product();
@@ -48,12 +47,30 @@ class ProductController extends Controller
         $product->sold = "0";
         $product->save();
 
+        // if($request->has('images')){
+
+        //     $path = 'public/prodcuct_images';
+
+        //     foreach($request->input('images')as $image){
+        //         // $imageName = $data['title'] . '-image-' . time().rand(1,1000) . '.' .$image->extention();
+        //         $imageName = $request->input('image') . '_' . time().rand(1,1000);
+        //         $image->move($path, $imageName);
+                
+        //         $image = new Picture();
+        //         $image->image = $request->input('images')->guessExtension();
+        //         $image->product_id = $product->id;
+        //         $image->save();
+        //     }
+        // }
+        
+
         $image = new Picture();
         $image->image = $request->input('image');
         $image->product_id = $product->id;
         $image->save();
 
         $request->flash();
+        $request->session()->flash('message', 'The product ' . $request->input('name') . ' was added');
 
         return redirect('home/create');
     }

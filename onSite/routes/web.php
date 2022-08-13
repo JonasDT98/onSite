@@ -25,11 +25,7 @@ Route::post('/register', [UserController::class, 'userStore']);
 Route::get('/login', [UserController::class, 'login']);
 Route::post('/login', [UserController::class, 'handlelogin']);
 
-Route::get('/profile', function(){
-    $users = \DB::table("users")->get();
-    $data['users'] = $users;
-    return view('profile/index', $data);
-});
+// Route::get('/profile/{user}', [UserController::class, 'getUser']);
 
 Route::get('/home/create', [ProductController::class, 'create']);
 Route::post('/home/store', [ProductController::class, 'store']);
