@@ -7,6 +7,7 @@ use \App\Models\Product;
 use \App\Models\picture;
 use Session;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -32,7 +33,12 @@ class ProductController extends Controller
     public function create()
     {
         if (Session::has('loginId')){
+
+            // if(! Gate::allows('create-product')){
+            //     abort(403);
+            // }
             return view('home/create');
+
         }else{
             return redirect('/login');
         }
@@ -91,5 +97,20 @@ class ProductController extends Controller
             }else{
                 return redirect('/login');
             }
+        }
+
+        public function destroy($id){
+
+            $product = \App\Models\Product::where('id', $id)->first();
+
+            if(\Auth::user()->cannot('delete', $product)){
+                abort(403);
+            }
+            
+            \App\Models\Picture::where('product_id', $id)->delete();
+            \App\Models\Product::destroy($id);
+            
+            return redirect('home/');
+
         }
 }
