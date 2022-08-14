@@ -47,10 +47,10 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         if (Session::has('loginId')){
-                // fible oplossing zoek naar nieuwe oplossing!!!!!!!!!!
-                // $size=$request->file('image')->getSize();
-                // $name=$request->file('image')->getClientOriginalName();
-                // $request->file('image')->store('public');
+                                        // fible oplossing zoek naar nieuwe oplossing!!!!!!!!!!
+                                        // $size=$request->file('image')->getSize();
+                                        // $name=$request->file('image')->getClientOriginalName();
+                                        // $request->file('image')->store('public');
 
                 $validated = $request->validate([
                     'name' => 'required|max:200',
@@ -68,13 +68,13 @@ class ProductController extends Controller
                 $product->sold = "0";
                 $product->save();
 
-                // if($request->has('images')){
+                // if($request->has('image')){
+                //     $path = 'public/product_images/';
+                //     $image = $request->file('image');
 
-                //     $path = 'public/prodcuct_images';
-
-                //     foreach($request->input('images')as $image){
+                //     foreach($request->input('image') as $image){
                 //         // $imageName = $data['title'] . '-image-' . time().rand(1,1000) . '.' .$image->extention();
-                //         $imageName = $request->input('image') . '_' . time().rand(1,1000);
+                //         $imageName =  $image->getClientOriginalName();
                 //         $image->move($path, $imageName);
                         
                 //         $image = new Picture();

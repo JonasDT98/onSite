@@ -46,7 +46,7 @@
 
         <div class="mb-3">
             <label for="image" class="form-label">Product images (only jpg or png)</label>
-            <input type="file" class="form-control" id="image" name="image" aria-describedby="namehelp" multiple>
+            <input type="file" class="form-control" id="image" name="image[]" aria-describedby="namehelp" multiple>
         </div>
 
         <div class="mb-3">
