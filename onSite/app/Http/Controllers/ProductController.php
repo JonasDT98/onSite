@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use \App\Models\Product;
 use \App\Models\picture;
+use \App\Models\User;
 use Session;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
@@ -13,8 +14,8 @@ class ProductController extends Controller
 {
     public function index(){
         if (Session::has('loginId')){
-            $prodcuts = \DB::table("products")->get();
-            $data['products'] = $prodcuts->reverse();
+            $products = \DB::table("products")->get();
+            $data['products'] = $products->reverse();
             return view('home/index', $data);
         }else{
             return redirect('/login');
@@ -56,7 +57,6 @@ class ProductController extends Controller
                     'name' => 'required|max:200',
                     'description' => 'required',
                     'price' => 'required',
-                    'image' => 'required',
                     'category' => 'required',
                 ]);
 
@@ -66,6 +66,7 @@ class ProductController extends Controller
                 $product->description = $request->input('description');
                 $product->category = $request->input('category');
                 $product->sold = "0";
+                $product->user_id = Auth::id();
                 $product->save();
 
                 // if($request->has('image')){
@@ -83,12 +84,32 @@ class ProductController extends Controller
                 //         $image->save();
                 //     }
                 // }
-                
 
-                $image = new Picture();
-                $image->image = $request->input('image');
-                $image->product_id = $product->id;
-                $image->save();
+                // $image = array();
+                // if($files = $request->file('image')){
+                //     foreach($files as $file){
+                //         $image_name = md5(rand(1000, 10000));
+                //         $ext = strtolower($file->getClientOriginalExtention());
+                //         $image_full_name = $image_name . "." . $ext;
+                //         $upload_path = "public/product_images/";
+                //         $image_url = $upload_path . $image_full_name;
+                //         $file->move($upload_path, $image_full_name);
+                //         $image[] = $image_url;
+
+                //     }
+                // }
+
+                // Picture::insert([
+                //     'image' => implode('|', $image),
+                //     'product_id' => '73'
+                // ]);
+                // return back();
+                                        
+
+                // $image = new Picture();
+                // $image->image = $request->input('image');
+                // $image->product_id = $product->id;
+                // $image->save();
 
                 $request->flash();
                 $request->session()->flash('message', 'The product ' . $request->input('name') . ' was added');
