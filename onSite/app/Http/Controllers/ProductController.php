@@ -31,6 +31,18 @@ class ProductController extends Controller
         }
     }
 
+
+    public function selling(\App\Models\Product $product){
+        if (Session::has('loginId')){
+            $data['product'] = $product;
+            return view('home/selling', $data);
+        }else{
+            return redirect('/login');
+        }
+    }
+
+
+
     public function create()
     {
         if (Session::has('loginId')){
@@ -60,6 +72,19 @@ class ProductController extends Controller
                     'category' => 'required',
                 ]);
 
+                // $new_product = Product::create('$data');
+                // if($request->has('images')){
+                //     foreach($request->file('images')as $image){
+                //         $imageName = $data['title'].'-image-'.time().rand(1,1000).'.'.$image->extension();
+                //         $image->move(public_path('product_images'),$imageName);
+                //         Picture::create([
+                //             'image'=>$imageName,
+                //             'product_id'=>$new_product->id
+                //         ]);
+                //     }
+                // }
+                // return back();
+
                 $product = new Product();
                 $product->name = $request->input('name');
                 $product->price = $request->input('price');
@@ -67,44 +92,19 @@ class ProductController extends Controller
                 $product->category = $request->input('category');
                 $product->sold = "0";
                 $product->user_id = Auth::id();
-                $product->save();
+                $product->save(); 
+                    
+                if($request->has('images')){
+                    foreach($request->file('images')as $image){
+                        $imageName = '-image-'.time().rand(1,1000).'.'.$image->extension();
+                        $image->move(public_path('product_images'),$imageName);
 
-                // if($request->has('image')){
-                //     $path = 'public/product_images/';
-                //     $image = $request->file('image');
-
-                //     foreach($request->input('image') as $image){
-                //         // $imageName = $data['title'] . '-image-' . time().rand(1,1000) . '.' .$image->extention();
-                //         $imageName =  $image->getClientOriginalName();
-                //         $image->move($path, $imageName);
-                        
-                //         $image = new Picture();
-                //         $image->image = $request->input('images')->guessExtension();
-                //         $image->product_id = $product->id;
-                //         $image->save();
-                //     }
-                // }
-
-                // $image = array();
-                // if($files = $request->file('image')){
-                //     foreach($files as $file){
-                //         $image_name = md5(rand(1000, 10000));
-                //         $ext = strtolower($file->getClientOriginalExtention());
-                //         $image_full_name = $image_name . "." . $ext;
-                //         $upload_path = "public/product_images/";
-                //         $image_url = $upload_path . $image_full_name;
-                //         $file->move($upload_path, $image_full_name);
-                //         $image[] = $image_url;
-
-                //     }
-                // }
-
-                // Picture::insert([
-                //     'image' => implode('|', $image),
-                //     'product_id' => '73'
-                // ]);
-                // return back();
-                                        
+                        $image = new Picture();
+                        $image->image = $imageName;
+                        $image->product_id = $product->id;
+                        $image->save();
+                    }
+                }
 
                 // $image = new Picture();
                 // $image->image = $request->input('image');
@@ -120,20 +120,26 @@ class ProductController extends Controller
             }
         }
 
-        public function destroy($id){
+        public function destroy(Request $request, $id){
 
             $product = \App\Models\Product::where('id', $id)->first();
 
             if(\Auth::user()->cannot('delete', $product)){
-                abort(403);
+                $request->flash();
+                $request->session()->flash('message', 'You cannot delete this product ');
+                // abort(403);
+                return back();
+            }else{
+                \App\Models\Picture::where('product_id', $id)->delete();
+                \App\Models\Product::destroy($id);
+                
+                return redirect('home/');
             }
             
-            \App\Models\Picture::where('product_id', $id)->delete();
-            \App\Models\Product::destroy($id);
             
-            return redirect('home/');
         }
 
+        
         // public function update($id){
 
         //     if(\Auth::user()->cannot('update', $product)){

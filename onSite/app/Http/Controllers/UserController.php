@@ -68,14 +68,24 @@ class UserController extends Controller
         return redirect('/login');
     }
 
+    public function store(Request $request){
+        if (Session::has('loginId')){
+            if($request->has('images')){
+                foreach($request->file('images')as $image){
+                    $imageName = '-image-'.time().rand(1,1000).'.'.$image->extension();
+                    $image->move(public_path('product_images'),$imageName);
 
-    // public function getUser(){
-
-    //     $users = \DB::table("users")->get();
-    //     $data['users'] = $users;
-    //     return view('profile/index', $data);
-
-    // }
+                    $image = new Picture();
+                    $image->image = $imageName;
+                    $image->product_id = $product->id;
+                    $image->save();
+                }
+            }
+            // return redirect('profile/');
+        }else{
+            return redirect('/login');
+        }
+    }
 
     public function getUser(\App\Models\User $user){
         $data['user'] = $user;

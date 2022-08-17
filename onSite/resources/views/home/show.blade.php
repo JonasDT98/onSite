@@ -5,19 +5,37 @@
     @endcomponent
     <h1>{{$product->name}}</h1>
 
+    @if($flash = session('message'))
+
+        @component('components/alert')
+            @slot('type') danger @endslot
+            {{ $flash }}
+        @endcomponent
+
+    @endif
+
     @foreach($product->picture as $p)
-        <img src="{{$p->image}}" alt="{{$p->image}}">
+        <img style="width:320px;" src="{{asset('product_images/'.$p->image)}}" alt="{{$p->image}}">
     @endforeach
 
     <p>{{$product->description}}</p>
     <p><strong>€{{$product->price}}</strong></p>
     <h5>Categorie: {{$product->category}}</h3>
 
-    <form method="post" action="/home/destroy/{{ $product->id }}">
+    <form class="pt-2" method="post" action="/home/selling/{{ $product->id }}">
+        @csrf
+        <input type="submit" class="btn btn-success" value="Buy product">
+    </form>
+
+    <form class="pt-2" method="post" action="/home/update/">
+        @csrf
+        <input type="submit" class="btn btn-primary" value="Update product">
+    </form>
+
+    <form class="pt-2" method="post" action="/home/destroy/{{ $product->id }}">
         @csrf
         <input type="hidden" name="_method" Value="DELETE">
         <input type="submit" class="btn btn-danger" value="Delete product">
     </form>
-
-    <a href="/home">TERUG</a>
+    
 @endsection

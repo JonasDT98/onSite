@@ -29,7 +29,7 @@
 
     @endif
 
-    <form method="post" action="{{ url('/home/store') }}">
+    <form method="post" action="{{ url('/home/store') }}" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
             <label for="name" class="form-label">Product name</label>
@@ -45,8 +45,8 @@
         </div>
 
         <div class="mb-3">
-            <label for="image" class="form-label">Product images (only jpg or png)</label>
-            <input type="file" class="form-control" id="image" name="image[]" aria-describedby="namehelp" multiple>
+            <label for="files" class="form-label">Product images (only jpg or png)</label>
+            <input type="file" class="form-control" id="files" name="images[]" accept="image/*" multiple>
         </div>
 
         <div class="mb-3">
