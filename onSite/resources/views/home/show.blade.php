@@ -22,18 +22,17 @@
     <p><strong>€{{$product->price}}</strong></p>
     <h5>Categorie: {{$product->category}}</h3>
 
-    <form class="pt-2" method="post" action="/home/selling/{{ $product->id }}">
+    <form class="pt-2" method="get" action="/home/buy/{{ $product->id }}" enctype="multipart/form-data">
         @csrf
-
         <input type="submit" class="btn btn-success" value="Buy product">
     </form>
 
-    <form class="pt-2" method="get" action="/home/update/{{ $product->id }}">
+    <form class="pt-2" method="get" action="/home/update/{{ $product->id }}" enctype="multipart/form-data">
         @csrf
         <input type="submit" class="btn btn-primary" value="Update product">
     </form>
 
-    <form class="pt-2" method="post" action="/home/destroy/{{ $product->id }}">
+    <form class="pt-2" method="post" action="/home/destroy/{{ $product->id }}" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="_method" Value="DELETE">
         <input type="submit" class="btn btn-danger" value="Delete product">

@@ -31,16 +31,6 @@ class ProductController extends Controller
         }
     }
 
-
-    public function selling(\App\Models\Product $product){
-        if (Session::has('loginId')){
-            $data['product'] = $product;
-            return view('home/selling', $data);
-        }else{
-            return redirect('/login');
-        }
-    }
-
     public function create()
     {
         if (Session::has('loginId')){
@@ -147,8 +137,6 @@ class ProductController extends Controller
                 ]);
 
                 $product = \App\Models\Product::where('id', $id)->first();
-                
-                
                 $product->name = $request->input('name');
                 $product->price = $request->input('price');
                 $product->description = $request->input('description');
@@ -161,7 +149,6 @@ class ProductController extends Controller
                     foreach($request->file('images')as $image){
                         $imageName = '-image-'.time().rand(1,1000).'.'.$image->extension();
                         $image->move(public_path('product_images'),$imageName);
-
 
                         $image = \App\Models\Picture::where('product_id', $product->id)->first();
                         $image->image = $imageName;
@@ -177,4 +164,37 @@ class ProductController extends Controller
                 return redirect('/login');
             }
         }
+
+        public function buy(Request $request, $id){
+            if (Session::has('loginId')){
+                $product = \App\Models\Product::where('id', $id)->first();
+                $picture = \App\Models\Picture::where('product_id', $product->id)->first();
+                if(\Auth::user()->cannot('buy', $product )){
+                    $request->flash();
+                        $request->session()->flash('message', 'You cannot buy your own product.');
+                        return back();
+                    }else{
+                        $data['product'] = $product;
+                        $dataPicture['picture'] = $picture;
+                        return view('home/buy',$data, $dataPicture);
+                    }
+            }else{
+                return redirect('/login');
+            }
+        }
+
+        public function selling(Request $request, $id){
+            if (Session::has('loginId')){
+                $product = \App\Models\Product::where('id', $id)->first();
+                $product->sold = "1";
+                $product->save(); 
+                    
+                $request->flash();
+                $request->session()->flash('message', 'Congratulations you bought: ' . $product->name);
+                return back();
+            }else{
+                return redirect('/login');
+            }
+        }
+
 }
