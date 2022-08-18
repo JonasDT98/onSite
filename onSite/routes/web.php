@@ -38,6 +38,8 @@ Route::get('/home/{product}', [ProductController::class, 'show']);
 Route::get('/logout', [UserController::class, 'logout']);
 
 Route::delete('/home/destroy/{id}', [ProductController::class, 'destroy']);
+Route::put('/home/update/{id}', [ProductController::class, 'update']);
 
-Route::get('/home/selling/{product}', [ProductController::class, 'selling']);
+
+// Route::get('/home/selling/{product}', [ProductController::class, 'selling']);
 

@@ -8,7 +8,6 @@
         @foreach($products as $product)
             @if($product->sold == 0)
                 <div>
-                    {{$product->sold}}
                     <a href="/home/{{ $product->id }}">{{ $product->name }}</a>
                     <p>{{$product->description}}</p>
                 </div>

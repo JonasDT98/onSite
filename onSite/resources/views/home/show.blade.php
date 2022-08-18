@@ -24,11 +24,13 @@
 
     <form class="pt-2" method="post" action="/home/selling/{{ $product->id }}">
         @csrf
+
         <input type="submit" class="btn btn-success" value="Buy product">
     </form>
 
-    <form class="pt-2" method="post" action="/home/update/">
+    <form class="pt-2" method="post" action="/home/update/{{ $product->id }}">
         @csrf
+        <input type="hidden" name="_method" Value="PUT">
         <input type="submit" class="btn btn-primary" value="Update product">
     </form>
 

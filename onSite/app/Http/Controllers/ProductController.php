@@ -60,10 +60,6 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         if (Session::has('loginId')){
-                                        // fible oplossing zoek naar nieuwe oplossing!!!!!!!!!!
-                                        // $size=$request->file('image')->getSize();
-                                        // $name=$request->file('image')->getClientOriginalName();
-                                        // $request->file('image')->store('public');
 
                 $validated = $request->validate([
                     'name' => 'required|max:200',
@@ -71,19 +67,6 @@ class ProductController extends Controller
                     'price' => 'required',
                     'category' => 'required',
                 ]);
-
-                // $new_product = Product::create('$data');
-                // if($request->has('images')){
-                //     foreach($request->file('images')as $image){
-                //         $imageName = $data['title'].'-image-'.time().rand(1,1000).'.'.$image->extension();
-                //         $image->move(public_path('product_images'),$imageName);
-                //         Picture::create([
-                //             'image'=>$imageName,
-                //             'product_id'=>$new_product->id
-                //         ]);
-                //     }
-                // }
-                // return back();
 
                 $product = new Product();
                 $product->name = $request->input('name');
@@ -106,11 +89,6 @@ class ProductController extends Controller
                     }
                 }
 
-                // $image = new Picture();
-                // $image->image = $request->input('image');
-                // $image->product_id = $product->id;
-                // $image->save();
-
                 $request->flash();
                 $request->session()->flash('message', 'The product ' . $request->input('name') . ' was added');
 
@@ -127,7 +105,7 @@ class ProductController extends Controller
             if(\Auth::user()->cannot('delete', $product)){
                 $request->flash();
                 $request->session()->flash('message', 'You cannot delete this product ');
-                // abort(403);
+                
                 return back();
             }else{
                 \App\Models\Picture::where('product_id', $id)->delete();
@@ -136,16 +114,27 @@ class ProductController extends Controller
                 return redirect('home/');
             }
             
-            
         }
 
-        
-        // public function update($id){
+        public function update(Request $request, $id){
 
-        //     if(\Auth::user()->cannot('update', $product)){
-        //         abort(403);
-        //     }
-        //     \App\Models\Product::destroy($id);
+            $product = \App\Models\Product::where('id', $id)->first();
+            $picture = \App\Models\Picture::where('product_id', $product->id)->first();
 
-        // }
+            if(\Auth::user()->cannot('update', $product )){
+                $request->flash();
+                $request->session()->flash('message', 'You cannot update this product ');
+                return back();
+            }else{
+                // dd($product->name);
+                $data['product'] = $product;
+                // dd($picture->image);
+                $dataPicture['picture'] = $picture;
+                return view('home/update',$data, $dataPicture);
+            }          
+        }
+
+        public function put(Request $request, $id){
+            
+        }
 }
