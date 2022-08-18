@@ -28,7 +28,7 @@
         @endcomponent
 
     @endif
-    <form method="post" action="{{ url('/home/put') }}" enctype="multipart/form-data">
+    <form method="post" action="/home/put/{{ $product->id }}" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
             <label for="name" class="form-label">Update product name</label>
@@ -52,7 +52,7 @@
         <div class="mb-3">
             <label for="category" class="form-label">Update category</label>
             <select id="category" class="form-select" name="category">
-                <option value="" hidden disabled selected>{{$product->category}}</option>
+                <option value="{{$product->category}}" hidden selected>{{$product->category}}</option>
                 <option value="Games">Games</option>
                 <option value="Muziek">Muziek</option>
                 <option value="Voertuigen">Voertuigen</option>
@@ -64,8 +64,8 @@
                 <option value="Elektronische apparatuur">Elektronische apparatuur</option>
             </select>
         </div>
-
-        <button type="submit" class="btn btn-primary">Update product</button>
+        <input type="hidden" name="_method" Value="PUT">
+        <input type="submit" class="btn btn-primary" value="Update product">
     </form>
 
 @endsection

@@ -28,9 +28,8 @@
         <input type="submit" class="btn btn-success" value="Buy product">
     </form>
 
-    <form class="pt-2" method="post" action="/home/update/{{ $product->id }}">
+    <form class="pt-2" method="get" action="/home/update/{{ $product->id }}">
         @csrf
-        <input type="hidden" name="_method" Value="PUT">
         <input type="submit" class="btn btn-primary" value="Update product">
     </form>
 

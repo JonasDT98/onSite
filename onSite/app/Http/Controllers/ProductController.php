@@ -41,8 +41,6 @@ class ProductController extends Controller
         }
     }
 
-
-
     public function create()
     {
         if (Session::has('loginId')){
@@ -88,7 +86,6 @@ class ProductController extends Controller
                         $image->save();
                     }
                 }
-
                 $request->flash();
                 $request->session()->flash('message', 'The product ' . $request->input('name') . ' was added');
 
@@ -99,42 +96,85 @@ class ProductController extends Controller
         }
 
         public function destroy(Request $request, $id){
+            if (Session::has('loginId')){
+                $product = \App\Models\Product::where('id', $id)->first();
 
-            $product = \App\Models\Product::where('id', $id)->first();
-
-            if(\Auth::user()->cannot('delete', $product)){
-                $request->flash();
-                $request->session()->flash('message', 'You cannot delete this product ');
-                
-                return back();
+                if(\Auth::user()->cannot('delete', $product)){
+                    $request->flash();
+                    $request->session()->flash('message', 'You cannot delete this product ');
+                    
+                    return back();
+                }else{
+                    \App\Models\Picture::where('product_id', $id)->delete();
+                    \App\Models\Product::destroy($id);
+                    
+                    return redirect('home/');
+                }
             }else{
-                \App\Models\Picture::where('product_id', $id)->delete();
-                \App\Models\Product::destroy($id);
-                
-                return redirect('home/');
-            }
+                return redirect('/login');
+            } 
             
         }
 
         public function update(Request $request, $id){
+            if (Session::has('loginId')){
 
-            $product = \App\Models\Product::where('id', $id)->first();
-            $picture = \App\Models\Picture::where('product_id', $product->id)->first();
+                $product = \App\Models\Product::where('id', $id)->first();
+                $picture = \App\Models\Picture::where('product_id', $product->id)->first();
 
-            if(\Auth::user()->cannot('update', $product )){
-                $request->flash();
-                $request->session()->flash('message', 'You cannot update this product ');
-                return back();
+                if(\Auth::user()->cannot('update', $product )){
+                    $request->flash();
+                    $request->session()->flash('message', 'You cannot update this product ');
+                    return back();
+                }else{
+                    $data['product'] = $product;
+                    $dataPicture['picture'] = $picture;
+                    return view('home/update',$data, $dataPicture);
+                }  
             }else{
-                // dd($product->name);
-                $data['product'] = $product;
-                // dd($picture->image);
-                $dataPicture['picture'] = $picture;
-                return view('home/update',$data, $dataPicture);
-            }          
+                return redirect('/login');
+            } 
+                      
         }
 
         public function put(Request $request, $id){
-            
+            if (Session::has('loginId')){
+
+                $validated = $request->validate([
+                    'name' => 'required|max:200',
+                    'description' => 'required',
+                    'price' => 'required',
+                ]);
+
+                $product = \App\Models\Product::where('id', $id)->first();
+                
+                
+                $product->name = $request->input('name');
+                $product->price = $request->input('price');
+                $product->description = $request->input('description');
+                $product->category = $request->input('category');
+                $product->sold = "0";
+                $product->user_id = Auth::id();
+                $product->save(); 
+                    
+                if($request->has('images')){
+                    foreach($request->file('images')as $image){
+                        $imageName = '-image-'.time().rand(1,1000).'.'.$image->extension();
+                        $image->move(public_path('product_images'),$imageName);
+
+
+                        $image = \App\Models\Picture::where('product_id', $product->id)->first();
+                        $image->image = $imageName;
+                        $image->product_id = $product->id;
+                        $image->save();
+                    }
+                }
+                $request->flash();
+                $request->session()->flash('message', 'The product ' . $request->input('name') . ' was updated');
+
+                return back();
+            }else{
+                return redirect('/login');
+            }
         }
 }
