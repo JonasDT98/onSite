@@ -26,6 +26,7 @@ Route::get('/login', [UserController::class, 'login']);
 Route::post('/login', [UserController::class, 'handlelogin']);
 
 Route::get('/profile', [UserController::class, 'profile']);
+Route::post('/profile/store', [UserController::class, 'store']);
 
 Route::get('/home/create', [ProductController::class, 'create']);
 Route::post('/home/store', [ProductController::class, 'store']);
@@ -36,5 +37,13 @@ Route::get('/home/{product}', [ProductController::class, 'show']);
 
 Route::get('/logout', [UserController::class, 'logout']);
 
+Route::get('/home/update/{id}', [ProductController::class, 'update']);
+
+Route::put('/home/put/{id}', [ProductController::class, 'put']);
+
 Route::delete('/home/destroy/{id}', [ProductController::class, 'destroy']);
+
+
+
+// Route::get('/home/selling/{product}', [ProductController::class, 'selling']);
 

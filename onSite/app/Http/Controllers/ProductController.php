@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use \App\Models\Product;
 use \App\Models\picture;
+use \App\Models\User;
 use Session;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
@@ -13,8 +14,8 @@ class ProductController extends Controller
 {
     public function index(){
         if (Session::has('loginId')){
-            $prodcuts = \DB::table("products")->get();
-            $data['products'] = $prodcuts->reverse();
+            $products = \DB::table("products")->get();
+            $data['products'] = $products->reverse();
             return view('home/index', $data);
         }else{
             return redirect('/login');
@@ -25,6 +26,16 @@ class ProductController extends Controller
         if (Session::has('loginId')){
             $data['product'] = $product;
             return view('home/show', $data);
+        }else{
+            return redirect('/login');
+        }
+    }
+
+
+    public function selling(\App\Models\Product $product){
+        if (Session::has('loginId')){
+            $data['product'] = $product;
+            return view('home/selling', $data);
         }else{
             return redirect('/login');
         }
@@ -47,16 +58,11 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         if (Session::has('loginId')){
-                // fible oplossing zoek naar nieuwe oplossing!!!!!!!!!!
-                // $size=$request->file('image')->getSize();
-                // $name=$request->file('image')->getClientOriginalName();
-                // $request->file('image')->store('public');
 
                 $validated = $request->validate([
                     'name' => 'required|max:200',
                     'description' => 'required',
                     'price' => 'required',
-                    'image' => 'required',
                     'category' => 'required',
                 ]);
 
@@ -66,30 +72,20 @@ class ProductController extends Controller
                 $product->description = $request->input('description');
                 $product->category = $request->input('category');
                 $product->sold = "0";
-                $product->save();
+                $product->user_id = Auth::id();
+                $product->save(); 
+                    
+                if($request->has('images')){
+                    foreach($request->file('images')as $image){
+                        $imageName = '-image-'.time().rand(1,1000).'.'.$image->extension();
+                        $image->move(public_path('product_images'),$imageName);
 
-                // if($request->has('images')){
-
-                //     $path = 'public/prodcuct_images';
-
-                //     foreach($request->input('images')as $image){
-                //         // $imageName = $data['title'] . '-image-' . time().rand(1,1000) . '.' .$image->extention();
-                //         $imageName = $request->input('image') . '_' . time().rand(1,1000);
-                //         $image->move($path, $imageName);
-                        
-                //         $image = new Picture();
-                //         $image->image = $request->input('images')->guessExtension();
-                //         $image->product_id = $product->id;
-                //         $image->save();
-                //     }
-                // }
-                
-
-                $image = new Picture();
-                $image->image = $request->input('image');
-                $image->product_id = $product->id;
-                $image->save();
-
+                        $image = new Picture();
+                        $image->image = $imageName;
+                        $image->product_id = $product->id;
+                        $image->save();
+                    }
+                }
                 $request->flash();
                 $request->session()->flash('message', 'The product ' . $request->input('name') . ' was added');
 
@@ -99,26 +95,86 @@ class ProductController extends Controller
             }
         }
 
-        public function destroy($id){
+        public function destroy(Request $request, $id){
+            if (Session::has('loginId')){
+                $product = \App\Models\Product::where('id', $id)->first();
 
-            $product = \App\Models\Product::where('id', $id)->first();
-
-            if(\Auth::user()->cannot('delete', $product)){
-                abort(403);
-            }
+                if(\Auth::user()->cannot('delete', $product)){
+                    $request->flash();
+                    $request->session()->flash('message', 'You cannot delete this product ');
+                    
+                    return back();
+                }else{
+                    \App\Models\Picture::where('product_id', $id)->delete();
+                    \App\Models\Product::destroy($id);
+                    
+                    return redirect('home/');
+                }
+            }else{
+                return redirect('/login');
+            } 
             
-            \App\Models\Picture::where('product_id', $id)->delete();
-            \App\Models\Product::destroy($id);
-            
-            return redirect('home/');
         }
 
-        // public function update($id){
+        public function update(Request $request, $id){
+            if (Session::has('loginId')){
 
-        //     if(\Auth::user()->cannot('update', $product)){
-        //         abort(403);
-        //     }
-        //     \App\Models\Product::destroy($id);
+                $product = \App\Models\Product::where('id', $id)->first();
+                $picture = \App\Models\Picture::where('product_id', $product->id)->first();
 
-        // }
+                if(\Auth::user()->cannot('update', $product )){
+                    $request->flash();
+                    $request->session()->flash('message', 'You cannot update this product ');
+                    return back();
+                }else{
+                    $data['product'] = $product;
+                    $dataPicture['picture'] = $picture;
+                    return view('home/update',$data, $dataPicture);
+                }  
+            }else{
+                return redirect('/login');
+            } 
+                      
+        }
+
+        public function put(Request $request, $id){
+            if (Session::has('loginId')){
+
+                $validated = $request->validate([
+                    'name' => 'required|max:200',
+                    'description' => 'required',
+                    'price' => 'required',
+                ]);
+
+                $product = \App\Models\Product::where('id', $id)->first();
+                
+                
+                $product->name = $request->input('name');
+                $product->price = $request->input('price');
+                $product->description = $request->input('description');
+                $product->category = $request->input('category');
+                $product->sold = "0";
+                $product->user_id = Auth::id();
+                $product->save(); 
+                    
+                if($request->has('images')){
+                    foreach($request->file('images')as $image){
+                        $imageName = '-image-'.time().rand(1,1000).'.'.$image->extension();
+                        $image->move(public_path('product_images'),$imageName);
+
+
+                        $image = \App\Models\Picture::where('product_id', $product->id)->first();
+                        $image->image = $imageName;
+                        $image->product_id = $product->id;
+                        $image->save();
+                    }
+                }
+                $request->flash();
+                $request->session()->flash('message', 'The product ' . $request->input('name') . ' was updated');
+
+                return back();
+            }else{
+                return redirect('/login');
+            }
+        }
 }

@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->foreignId('user_id')->default(9);
+            $table->integer('user_id')->default(9);
         });
     }
 

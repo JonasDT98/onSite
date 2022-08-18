@@ -15,6 +15,7 @@ class UserController extends Controller
     }
 
     public function login(){
+
         return view('users/login');
     }
 
@@ -28,6 +29,7 @@ class UserController extends Controller
 
         if (Auth::attempt($credentials)){
             $request->session()->put('loginId', $user->id);
+            $request->session()->put('profilePicture', $user->profile_picture);
             return redirect('/home');
         }else{
             $request->flash();
@@ -63,19 +65,34 @@ class UserController extends Controller
         $user->lastname = $request->input('lastname');
         $user->email = $request->input('email');
         $user->password = Hash::make($request->input('password'));
-        $user->profile_picture = 'https://freesvg.org/img/abstract-user-flat-4.png';
+        $user->profile_picture = 'default.jpg';
         $user->save();
         return redirect('/login');
     }
 
+    public function store(Request $request){
+        $validated = $request->validate([
+            'profileimage' => 'required'
+        ]);
 
-    // public function getUser(){
+        if (Session::has('loginId')){
+            if($request->has('profileimage')){
+                foreach($request->file('profileimage')as $picture){
+                    $profilePictureName = '-image-'.time().rand(1,1000).'.'.$picture->extension();
+                    $picture->move(public_path('profile_images'),$profilePictureName);
 
-    //     $users = \DB::table("users")->get();
-    //     $data['users'] = $users;
-    //     return view('profile/index', $data);
+                    $user = Auth::user();
+                    $user->profile_picture = $profilePictureName;
+                    $user->save();
+                    $request->session()->put('profilePicture', $profilePictureName);
+                }
+            }
+            return redirect('profile/');
 
-    // }
+        }else{
+            return redirect('/login');
+        }
+    }
 
     public function getUser(\App\Models\User $user){
         $data['user'] = $user;
@@ -85,6 +102,7 @@ class UserController extends Controller
     public function logout(){
         if (Session::has('loginId')){
             Session::pull('loginId');
+            Session::pull('profilePicture');
             return redirect('/login');
         }
     }

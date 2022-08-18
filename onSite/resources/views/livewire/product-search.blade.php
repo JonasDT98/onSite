@@ -4,10 +4,13 @@
     @if($search)
         <h6>Searching for: <em>{{ $search }}</em></h6>
     @endif
+    
         @foreach($products as $product)
-            <div>
-                <a href="/home/{{ $product->id }}">{{ $product->name }}</a>
-                <p>{{$product->description}}</p>
-            </div>
+            @if($product->sold == 0)
+                <div>
+                    <a href="/home/{{ $product->id }}">{{ $product->name }}</a>
+                    <p>{{$product->description}}</p>
+                </div>
+            @endif
         @endforeach
 </div>

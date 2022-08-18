@@ -5,7 +5,7 @@
         @component('components/nav')
         @endcomponent
 
-    <h1>Add product</h1>
+    <h1>Update product</h1>
 
     @if($errors->any())
     
@@ -28,31 +28,31 @@
         @endcomponent
 
     @endif
-
-    <form method="post" action="{{ url('/home/store') }}" enctype="multipart/form-data">
+    <form method="post" action="/home/put/{{ $product->id }}" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
-            <label for="name" class="form-label">Product name</label>
-            <input value="{{ old('name') }}" type="text" class="form-control" id="name" name="name" aria-describedby="namehelp">
+            <label for="name" class="form-label">Update product name</label>
+            <input value="{{$product->name}}" type="text" class="form-control" id="name" name="name" aria-describedby="namehelp">
         </div>
         <div class="mb-3">
-            <label for="description" class="form-label">Product description</label></br>
-            <textarea name="description" class="form-control" id="description" name="description" cols="40" rows="4">{{ old('description') }}</textarea>
+            <label for="description" class="form-label">Update product description</label></br>
+            <textarea name="description" class="form-control" id="description" name="description" cols="40" rows="4">{{$product->description}}</textarea>
         </div>
         <div class="mb-3">
-            <label for="price" class="form-label">Product price in €</label>
-            <input value="{{ old('price') }}" type="text" class="form-control" id="price" name="price" placeholder="12.44" aria-describedby="namehelp">
+            <label for="price" class="form-label">Update product price in €</label>
+            <input value="{{$product->price}}" type="text" class="form-control" id="price" name="price" placeholder="12.44" aria-describedby="namehelp">
         </div>
 
         <div class="mb-3">
-            <label for="files" class="form-label">Product images (only jpg or png)</label>
+            <img style="width:320px;" src="{{asset('product_images/'.$picture->image)}}" alt="{{$picture->image}}"></br>
+            <label for="files" class="form-label">Change product images (only jpg or png)</label>
             <input type="file" class="form-control" id="files" name="images[]" accept="image/*" multiple>
         </div>
 
         <div class="mb-3">
-            <label for="category" class="form-label">Category</label>
+            <label for="category" class="form-label">Update category</label>
             <select id="category" class="form-select" name="category">
-                <option value="" hidden disabled selected>Category</option>
+                <option value="{{$product->category}}" hidden selected>{{$product->category}}</option>
                 <option value="Games">Games</option>
                 <option value="Muziek">Muziek</option>
                 <option value="Voertuigen">Voertuigen</option>
@@ -64,8 +64,8 @@
                 <option value="Elektronische apparatuur">Elektronische apparatuur</option>
             </select>
         </div>
-
-        <button type="submit" class="btn btn-primary">Add product</button>
+        <input type="hidden" name="_method" Value="PUT">
+        <input type="submit" class="btn btn-primary" value="Update product">
     </form>
 
 @endsection
