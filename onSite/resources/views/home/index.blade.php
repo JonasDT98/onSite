@@ -10,3 +10,4 @@
     <livewire:product-search />
     
 @endsection
+
