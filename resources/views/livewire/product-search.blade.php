@@ -10,6 +10,7 @@
                 <div>
                     <a href="/home/{{ $product->id }}">{{ $product->name }}</a>
                     <p>{{$product->description}}</p>
+                    
                 </div>
             @endif
         @endforeach

@@ -18,7 +18,7 @@
             <label for="email">Email address</label>
             <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
         </div>
-        <div class="form-group">
+        <div class="form-group  mb-2">
             <label for="password">Password</label>
             <input type="password" name="password" class="form-control" id="password" placeholder="Password">
         </div>
@@ -28,5 +28,5 @@
         </div> -->
         <button type="submit" class="btn btn-primary">Log in</button>
     </form>
-    <a href="/register">No account yet?</a>
+    <a href="index.php/register">No account yet?</a>
 @endsection
